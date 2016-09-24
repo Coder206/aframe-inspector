@@ -16,7 +16,7 @@ import '../css/main.css';
 injectCSS('https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css');
 
 export default class Main extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       inspectorEnabled: true,
@@ -26,36 +26,36 @@ export default class Main extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     // Create an observer to notify the changes in the scene
     var observer = new MutationObserver(function (mutations) {
       Events.emit('domModified', mutations);
     });
-    var config = { attributes: true, childList: true, characterData: true };
+    var config = {attributes: true, childList: true, characterData: true};
     observer.observe(this.state.sceneEl, config);
 
     Events.on('openTexturesModal', function (textureOnClose) {
-      this.setState({ isModalTexturesOpen: true, textureOnClose: textureOnClose });
+      this.setState({isModalTexturesOpen: true, textureOnClose: textureOnClose});
     }.bind(this));
 
     Events.on('entitySelected', entity => {
-      this.setState({ entity: entity });
+      this.setState({entity: entity});
     });
 
     Events.on('inspectorModeChanged', enabled => {
-      this.setState({ inspectorEnabled: enabled });
+      this.setState({inspectorEnabled: enabled});
     });
   }
 
   onModalTextureOnClose = value => {
-    this.setState({ isModalTexturesOpen: false });
+    this.setState({isModalTexturesOpen: false});
     if (this.state.textureOnClose) {
       this.state.textureOnClose(value);
     }
   }
 
   openModal = () => {
-    this.setState({ isModalTexturesOpen: true });
+    this.setState({isModalTexturesOpen: true});
   }
 
   toggleEdit = () => {
@@ -66,10 +66,10 @@ export default class Main extends React.Component {
     }
   }
 
-  render() {
+  render () {
     var scene = this.state.sceneEl;
     var textureDialogOpened = this.state.isModalTexturesOpen;
-    let editButton = <a className='toggle-edit' onClick={this.toggleEdit}>{(this.state.inspectorEnabled ? 'Back to Scene' : 'Inspect Scene') }</a>;
+    let editButton = <a className='toggle-edit' onClick={this.toggleEdit}>{(this.state.inspectorEnabled ? 'Back to Scene' : 'Inspect Scene')}</a>;
 
     return (
       <div>
@@ -88,21 +88,24 @@ export default class Main extends React.Component {
   }
 }
 
-function injectCSS(url) {
+function injectCSS (url) {
   var link = document.createElement('link');
   link.href = url;
   link.type = 'text/css';
   link.rel = 'stylesheet';
   link.media = 'screen,print';
   link.setAttribute('data-aframe-inspector', 'style');
-  document.getElementsByTagName('head')[0].appendChild(link);
+  document.head.appendChild(link);
 }
 
-(function init() {
+(function init () {
   var webFont = document.createElement('script');
   webFont.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js';
   var webFontLoader = document.createElement('script');
-  webFontLoader.innerHTML = "WebFont.load({google: {families: ['Roboto Mono']}});";
+  webFontLoader.innerHTML = 'WebFont.load({google: {families: ["Roboto Mono"]}});';
+  document.head.appendChild(webFont);
+  document.head.appendChild(webFontLoader);
+
   var div = document.createElement('div');
   div.id = 'aframe-inspector';
   div.setAttribute('data-aframe-inspector', 'app');
